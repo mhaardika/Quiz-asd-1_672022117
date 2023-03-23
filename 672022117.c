@@ -49,6 +49,7 @@ void inisialisasi()
             antrian.head=antrian.tail = 0;
             antrian.data[antrian.tail] = data;
             printf("Data %d berhasil diinput!\n",antrian.data[antrian.tail]);
+            ext();
         }
         else{
 
@@ -58,6 +59,7 @@ void inisialisasi()
             antrian.tail++;
             antrian.data[antrian.tail] = data;
             printf("data %d berhasil di input\n",antrian.data[antrian.tail]);
+            ext();
         }
         }
     }
@@ -67,17 +69,20 @@ int dequeue()
         if(isEmpty() == 1)
         {
             printf("Data masih kosong!\n");
+            ext();
         }
         else{
             int i;
             int e = antrian.data[antrian.head];
             printf("data %d telah dikeluarkan dari antiran\n",antrian.data[antrian.head]);
+            ext();
             for(i=antrian.head;i<=antrian.tail-1;i++)
             {
                 antrian.data[i] = antrian.data[i+1];
             }
             antrian.tail--;
                  return e;
+
 
         }
 
@@ -87,6 +92,7 @@ void clear()
     {
         antrian.head = antrian.tail = -1;
         printf("Data telah di reset!\n");
+        ext();
     }
 
 void print()
@@ -95,11 +101,12 @@ void print()
         {
             for(int i=antrian.head;i<=antrian.tail;i++)
             {
-                printf("%d ",antrian.data[i]);
+                printf("Data ke %d = %d\n",i,antrian.data[i]);
 
-            }
+            }ext();
         }else{
             printf("Data masih kosongg!\n");
+            ext();
         }
     }
 
@@ -107,16 +114,18 @@ void qiuqiu()
     {
         int dt;
         inisialisasi();
-     int choice;
+     int pil;
         do{
-            printf("1.Enqueue\n");
-            printf("2.Dequeue\n");
+            iniqiu:
+            printf("1.Enqueue int\n");
+            printf("2.Dequeue int\n");
             printf("3.Print Queue\n");
             printf("4.Clear Queue\n");
             printf("5.Return Main Menu\n");
             printf("Input pilihan:");
-            scanf("%d",&choice);
-                switch(choice)
+            scanf("%d",&pil);
+            fflush(stdin);
+                switch(pil)
                 {
                 case 1:
                     system("cls");
@@ -125,18 +134,39 @@ void qiuqiu()
                         printf("Masukkan data:");
                         scanf("%d",&dt);
                         enqueue(dt);
+
                     }else{
                         printf("data sudah penuh!\n");
+                        ext();
+
                     }
                     break;
-                case 2: system("cls");dequeue(); break;
-                case 3: system("cls");print(); printf("\n"); break;
-                case 4: system("cls");clear();break;
-                case 5: system("cls");main();break;
-                default: printf("tidak ada dalam pilihan\n");system("cls"); break;
+                case 2:
+                    system("cls");
+                    dequeue();
+                    break;
+                case 3:
+                    system("cls");
+                    print();
+                    printf("\n");
+                    break;
+                case 4:
+                    system("cls");
+                    clear();
+                    break;
+                case 5:
+                    system("cls");
+                    main();
+                    break;
+                default:
+                    printf("tidak ada dalam pilihan\n");
+                    system("pause");
+                    system("cls");
+                    goto iniqiu;
+                    break;
                 }
 
-        }while(choice>0 && choice <6);
+        }while(pil>0 && pil <6);
         //return 0;
 
     }
@@ -146,15 +176,15 @@ struct Tumpukan{
 
         }tumpuk;
         //buat fungsi apakah tumpukan masih kosong
-        int kosong()
+int kosong()
+{
+    if(tumpuk.top == -1)
         {
-            if(tumpuk.top == -1)
-            {
-                return 1;
-            }else{
-                return 0;
-            }
+            return 1;
+        }else{
+            return 0;
         }
+}
 
         //buat fungsi apakah tumpukan sudah penuh
         //buat fungsi apakah tumpukan sudah penuh
@@ -177,17 +207,25 @@ struct Tumpukan{
 
         void push()
         {
-            char temp[30];
+            char tampung[30];
             if(Penuh() != 1)
             {
                 tumpuk.top++;
                 printf("Masukkan data:");
-                scanf("%s",&temp);
-                strcpy(tumpuk.data[tumpuk.top],temp);
+                scanf("%[^\n]",&tampung);
+                strcpy(tumpuk.data[tumpuk.top],tampung);
                 printf("Data %s berhasil di input\n",tumpuk.data[tumpuk.top]);
+                ext();
             }else{
                 printf("Data sudah penuh");
+                ext();
             }
+
+        }
+        void ext()
+        {
+            system("pause");
+            system("cls");
         }
 
         void pop()
@@ -196,20 +234,22 @@ struct Tumpukan{
             {
                 printf("Data %s telah dibuang\n",tumpuk.data[tumpuk.top]);
                 tumpuk.top--;
+                ext();
 
             }else{
                 printf("Data masih kosong\n");
+                ext();
             }
         }
 
-        void printData()
+        void TampilStack()
         {
             if(kosong() !=1)
             {
                 for(int i=tumpuk.top;i>=0;i--)
                 {
-                    printf("%s\n",tumpuk.data[i]);
-                }
+                    printf("Data Stack ke %d :%s\n",i,tumpuk.data[i]);
+                }ext();
             }else{
                 printf("Data masih kosong\n");
             }
@@ -217,49 +257,66 @@ struct Tumpukan{
         void stack()
         {
         initiate();
-        int choice;
+        int inputan;
         do{
+            //system("cls");
+            labelstack:
             printf("1.Push Stack\n");
             printf("2.Pop Stack\n");
             printf("3.Print Stack\n");
             printf("4.Clear Stack\n");
             printf("5.Return Main Menu\n");
             printf("Input pilihan:");
-            scanf("%d",&choice);
-                switch(choice)
+            scanf("%d",&inputan);
+            fflush(stdin);
+                switch(inputan)
                 {
-                case 1: system("cls"); push(); break;
-                case 2: system("cls"); pop(); break;
-                case 3: system("cls"); printData(); break;
+                case 1:
+                    system("cls");
+                    push();
+                    break;
+                case 2:
+                    system("cls");
+                    pop();
+                    break;
+                case 3:
+                    system("cls");
+                    TampilStack();
+                    break;
                 case 4:
                     system("cls");
                     if(kosong())
                     {
                         printf("Data masih kosong!,tidak bisa reset\n");
+                        ext();
                     }
                     else{
                           initiate();
                     printf("Data telah di reset!\n");
+                    ext();
                     }
 
                     break;
-                case 5: system("cls"); main();
-                default: printf("tidak ada dalam pilihan\n"); break;
+                case 5:
+                    main();
+                default:
+                    printf("tidak ada dalam pilihan\n");
+                    system("pause");
+                    system("cls");
+                    goto labelstack;
+                    break;
                 }
 
-        }while(choice >0 && choice < 6);
-//return 0;
+        }while(inputan >0 && inputan < 6);
     }
 
 void main()
 {
-    int input,inMenu,y=1;
-    int up=24,down=25;
-    int menutambah;
-    char pil;
+    int Menu,y=1;
+    char pilihan;
 
     system("mode con: cols=120 lines=30");
-    system("color F0");
+    system("color F8");
     system("cls");
     do{
     if(y==0){
@@ -272,31 +329,42 @@ void main()
         }
     gotoxy(0,2);
     printf("   ");
-    for(int a=0;a<41;a++){printf("*");}
-    printf("\n   | >>    Tugas Quiz Stack and Queue   << |\n   ");
-    for(int a=0;a<41;a++){printf("*");}
+    for(int a=0;a<41;a++){printf("+");}
+    printf("\n   | ++    Tugas Quiz Stack and Queue   ++ |\n   ");
+    for(int a=0;a<41;a++){printf("+");}
     printf("\n   |                                       |\n");
     printf("   |           1. Stack String             |\n");
     printf("   |           2. Queue Integer            |\n");
     printf("   |           3. Exit Program             |\n");
     printf("   |                                       |\n   ");
-    for(int a=0;a<41;a++){printf("*");}
-    gotoxy(8,5+y);printf("==>");
-            pil=getch();
-            switch(pil){
-            case 72: y--; break;
-            case 80: y++; break;
-            default: break;
-
+    for(int a=0;a<41;a++){printf("+");}
+    gotoxy(8,5+y);printf("=>");
+            pilihan=getch();
+            switch(pilihan){
+            case 72:
+                y--;
+                break;
+            case 80:
+                y++;
+                break;
+            default:
+                break;
     }
-    }while((int)pil!=13);
-    inMenu=y;
+    }while((int)pilihan!=13);
+    Menu=y;
     system("cls");
 
-    switch (inMenu)
+    switch (Menu)
     {
-    case 1: stack(); break;
-    case 2:  qiuqiu();  break;
-    case 3: printf("\nTERIMA KASIH ~ GOODLUCK\n"); system("cls"); break;
+    case 1:
+        stack();
+        break;
+    case 2:
+        qiuqiu();
+        break;
+    case 3:
+        printf("\nTERIMA KASIH ~ GOODLUCK\n");
+        system("cls");
+        break;
     }
 }
